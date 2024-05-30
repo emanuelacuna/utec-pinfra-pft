@@ -2,6 +2,7 @@ package edu.utec.loginPinfra.security;
 
 import edu.utec.loginPinfra.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,4 +19,5 @@ public class CustomUserDetailsService implements UserDetailsService {
         return userRepository.findByUsername(username)
                 .map(CustomUserDetails::new).orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
+
 }

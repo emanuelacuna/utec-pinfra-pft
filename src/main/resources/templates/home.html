@@ -21,10 +21,22 @@
 
         <div sec:authorize="hasRole('ADMIN')">
             This content is only shown to users with ADMIN role.
+            <span><a th:href="@{/career}" type="submit">Careers</a></span>
+            <span><a th:href="@{/admin}" type="submit">Users</a></span>
         </div>
 
         <div sec:authorize="hasRole('USER')">
             This content is only shown to users with USER role.
+            <form th:action="@{/user/dropout}" method="post">
+                <input type="hidden" name="id" th:value="${#authentication.getPrincipal().getUser().getId()}">
+                <button type="submit" class="btn btn-primary">Drop Out</button>
+            </form>
+            <span><a th:href="@{/user/update}" type="submit">Update</a></span>
+        </div>
+
+        <div sec:authorize="hasRole('STUDENT')">
+            This content is only shown to users with STUDENT role.
+            <span><a th:href="@{/user/update}" type="submit">Update</a></span>
         </div>
 
         <div>

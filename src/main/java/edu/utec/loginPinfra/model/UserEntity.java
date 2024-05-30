@@ -1,18 +1,21 @@
 package edu.utec.loginPinfra.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @SuperBuilder
 @Entity
-/*TODO:
-    -Modify user to match the requirements in the project
-    -Add subclass Student
-    -Add Career and a One to Many relationship to Student
-*/
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "user_type")
+@DiscriminatorValue(value = "user")
 public class UserEntity{
 
     @Id @GeneratedValue(strategy =
@@ -29,9 +32,19 @@ public class UserEntity{
 
     private String email;
 
+    private LocalDate birthDate;
+
+    private String address;
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_role", joinColumns =
     @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private List<Role> role = new ArrayList<>();
+
+    private boolean active;
+
+    public int getAge() {
+        return LocalDate.now().getYear() - getBirthDate().getYear();
+    }
 }

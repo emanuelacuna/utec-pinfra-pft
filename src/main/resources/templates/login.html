@@ -11,13 +11,13 @@
 </head>
 <body>
     <div class="container">
-
-        <div th:if="${param.error}" class="alert alert-danger">
-            Invalid username and password.</div>
+        <div th:if="${errorMessage}" class="alert alert-danger">
+            <p th:text="${errorMessage}"></p>
+        </div>
         <div th:if="${param.logout}" class="alert alert-success">
-            You have been logged out.</div>
+            <p>You have been logged out.</p></div>
         <div th:if="${param.success}" class="alert alert-success">
-            Registration successful, please login.</div>
+            <p>Registration successful, please login.</p></div>
 
         <form method="post" th:action="@{/login}">
             <div class="form-group">

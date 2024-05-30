@@ -1,12 +1,12 @@
 package edu.utec.loginPinfra.dto;
 
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import java.time.LocalDate;
+
 @Data
-/*TODO:
-    -Modify the class to match the requirements, adding the student fields and the necessary constraints
-*/
 public class RegistrationDto {
 
     private Long id;
@@ -25,5 +25,15 @@ public class RegistrationDto {
 
     @NotEmpty(message = "Email should not be empty")
     private String email;
+
+    @NotNull(message = "Birthdate should not be empty")
+    private LocalDate birthDate;
+
+    @NotEmpty(message = "Address should not be empty")
+    private String address;
+
+    private Long studentNumber;
+
+    private Long career;
 
 }
