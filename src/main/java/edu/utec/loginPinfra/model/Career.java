@@ -1,6 +1,5 @@
 package edu.utec.loginPinfra.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 

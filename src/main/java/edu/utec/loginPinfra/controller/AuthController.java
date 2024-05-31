@@ -2,7 +2,6 @@ package edu.utec.loginPinfra.controller;
 
 import edu.utec.loginPinfra.dto.CareerDto;
 import edu.utec.loginPinfra.dto.RegistrationDto;
-import edu.utec.loginPinfra.model.Career;
 import edu.utec.loginPinfra.service.CareerServiceImpl;
 import edu.utec.loginPinfra.service.UserServiceImp;
 import jakarta.servlet.http.HttpServletRequest;
