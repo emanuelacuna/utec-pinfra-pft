@@ -5,14 +5,15 @@
 
     .card-header {
         background-color: #3b3838;
-        color: #ecebe9;
-    }
-
-    .btn {
-        background-color: #369cce;
         color: white;
     }
 
-    a {
-        color: #369cce;
+    .navbar {
+        background-color: #3b3838;
+        color: white;
+    }
+
+    .dropdown-menu {
+        background-color: #3b3838;
+        color: white;
     }
