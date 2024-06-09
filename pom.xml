@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>edu.utec</groupId>
-	<artifactId>loginPinfra</artifactId>
+	<artifactId>pinfrapft</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>loginPinfra</name>
-	<description>Login for infrastructure project</description>
+	<name>pinfraPft</name>
+	<description>Infrastructure Project and Final Technical Project</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
