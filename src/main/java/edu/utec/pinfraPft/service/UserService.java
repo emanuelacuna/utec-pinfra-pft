@@ -1,17 +1,19 @@
 package edu.utec.pinfraPft.service;
 
-import edu.utec.pinfraPft.dto.RegistrationDto;
+import edu.utec.pinfraPft.dto.UserDto;
 import edu.utec.pinfraPft.model.UserEntity;
 
 public interface UserService {
 
-    void register(RegistrationDto registrationDto);
-
+    void register(UserDto userDto);
     UserEntity findByUsername(String username);
-
-    UserEntity findByEmail(String email);
+    UserEntity findByPersonalEmail(String personalEmail);
+    UserEntity findByInstitutionalEmail(String institutionalEmail);
+    UserEntity findByDocument(int document);
 
     boolean existsByUsername(String username);
-    boolean existsByEmail(String email);
+    boolean existsByPersonalEmail(String personalEmail);
+    boolean existsByInstitutionalEmail(String institutionalEmail);
+    boolean existsByDocument(int document);
 
 }

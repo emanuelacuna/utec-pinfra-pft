@@ -1,6 +1,7 @@
 package edu.utec.pinfraPft.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.PrimaryKeyJoinColumn;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,8 +10,10 @@ import lombok.experimental.SuperBuilder;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @SuperBuilder
 @Entity @PrimaryKeyJoinColumn(name = "id")
-public class Student extends UserEntity {
+public class Teacher extends UserEntity {
 
-    private int generation;
+    private String area;
+
+    private String tutorRole;
 
 }

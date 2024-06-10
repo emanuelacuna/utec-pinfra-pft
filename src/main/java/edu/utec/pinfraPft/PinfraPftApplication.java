@@ -1,12 +1,11 @@
 package edu.utec.pinfraPft;
 
-import edu.utec.pinfraPft.model.Career;
+import edu.utec.pinfraPft.model.Department;
+import edu.utec.pinfraPft.model.Itr;
+import edu.utec.pinfraPft.model.Locality;
 import edu.utec.pinfraPft.model.Role;
-import edu.utec.pinfraPft.model.Student;
-import edu.utec.pinfraPft.model.UserEntity;
-import edu.utec.pinfraPft.repository.CareerRepository;
-import edu.utec.pinfraPft.repository.RoleRepository;
-import edu.utec.pinfraPft.repository.UserRepository;
+import edu.utec.pinfraPft.repository.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -14,24 +13,21 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
-
 @SpringBootApplication
+@RequiredArgsConstructor
 public class PinfraPftApplication implements CommandLineRunner {
 
-	@Autowired
-	private UserRepository userRepository;
+	private final UserRepository userRepository;
 
-	@Autowired
-	public RoleRepository roleRepository;
+	private final RoleRepository roleRepository;
 
-	@Autowired
-	public PasswordEncoder passwordEncoder;
+	private final PasswordEncoder passwordEncoder;
 
-	@Autowired
-	public CareerRepository careerRepository;
+	private final DepartmentRepository departmentRepository;
+
+	private final LocalityRepository localityRepository;
+
+	private final ItrRepository itrRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(edu.utec.pinfraPft.PinfraPftApplication.class, args);
@@ -41,94 +37,28 @@ public class PinfraPftApplication implements CommandLineRunner {
 	@Transactional
 	public void run(String... args) throws Exception {
 
-		//Create roles if they don't exist
 		Role adminRole = Role.builder().name("ROLE_ADMIN").build();
-		Role userRole = Role.builder().name("ROLE_USER").build();
 		Role studentRole = Role.builder().name("ROLE_STUDENT").build();
+		Role teacherRole = Role.builder().name("ROLE_TEACHER").build();
 
 		if(roleRepository.findByName("ROLE_ADMIN").isEmpty()) {
 			roleRepository.save(adminRole);
 		}
-		if(roleRepository.findByName("ROLE_USER").isEmpty()) {
-			roleRepository.save(userRole);
+		if(roleRepository.findByName("ROLE_TEACHER").isEmpty()) {
+			roleRepository.save(teacherRole);
 		}
 		if(roleRepository.findByName("ROLE_STUDENT").isEmpty()) {
 			roleRepository.save(studentRole);
 		}
 
-		//Create admin if it doesn't exist
-		UserEntity admin = UserEntity.builder()
-				.username("admin")
-				.password(passwordEncoder.encode("admin"))
-				.name("Administrador")
-				.surname("UTEC")
-				.email("admin@utec.edu.uy")
-				.role(Arrays.asList(adminRole))
-				.birthDate(LocalDate.of(2024, 5, 22))
-				.address("Fray Bentos")
-				.active(true)
-				.build();
+		Department department = Department.builder().name("Departamento de prueba").build();
+		departmentRepository.save(department);
 
-		userRepository.save(admin);
+		Locality locality = Locality.builder().name("Localidad de prueba").build();
+		localityRepository.save(locality);
 
-		//Create user if it doesn't exist
-		UserEntity user = UserEntity.builder()
-				.username("user")
-				.password(passwordEncoder.encode("user"))
-				.name("Usuario")
-				.surname("UTEC")
-				.email("user@utec.edu.uy")
-				.role(Arrays.asList(userRole))
-				.birthDate(LocalDate.of(2000, 2, 28))
-				.address("Fray Bentos")
-				.active(false)
-				.build();
+		Itr itr = Itr.builder().name("Itr de prueba").build();
+		itrRepository.save(itr);
 
-		userRepository.save(user);
-
-		//Create career if it doesn't exist
-		List<String> careers = Arrays.asList(
-				"Technologist in Dairy Production Systems Management",
-				"Technologist in Systems Analysis and Development",
-				"Chemical Technologist",
-				"Industrial Mechanical Technologist",
-				"Information Technology Technologist",
-				"Environmental Control Technologist",
-				"Bachelor's Degree in Jazz and Creative Music",
-				"Bachelor's Degree in Food Analysis",
-				"Bachelor's Degree in Dairy Science and Technology",
-				"Bachelor's Degree in Information Technologies",
-				"Bachelor's Degree in Data Engineering and Artificial Intelligence",
-				"Engineering in Renewable Energies",
-				"Engineering in Water and Sustainable Development",
-				"Engineering in Logistics",
-				"Engineering in Mechatronics",
-				"Engineering in Control and Automation",
-				"Biomedical Engineering",
-				"Agro-Environmental Engineering"
-		);
-
-		List<Career> careersList = careers.stream()
-				.map(Career::new)
-				.toList();
-
-		careerRepository.saveAll(careersList);
-
-		//Create student if it doesn't exist
-		UserEntity student = Student.builder()
-				.username("student")
-				.password(passwordEncoder.encode("student"))
-				.name("Estudiante")
-				.surname("UTEC")
-				.email("student@utec.edu.uy")
-				.role(Arrays.asList(studentRole))
-				.birthDate(LocalDate.of(2005, 3, 20))
-				.address("Fray Bentos")
-				.studentNumber(123456L)
-				.career(careerRepository.findById(1L).get())
-				.active(false)
-				.build();
-
-		userRepository.save(student);
 	}
 }

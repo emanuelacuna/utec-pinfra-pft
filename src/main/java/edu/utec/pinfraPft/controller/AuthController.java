@@ -1,12 +1,16 @@
 package edu.utec.pinfraPft.controller;
 
-import edu.utec.pinfraPft.dto.CareerDto;
-import edu.utec.pinfraPft.dto.RegistrationDto;
-import edu.utec.pinfraPft.service.CareerServiceImpl;
-import edu.utec.pinfraPft.service.UserServiceImp;
+import edu.utec.pinfraPft.dto.DepartmentDto;
+import edu.utec.pinfraPft.dto.ItrDto;
+import edu.utec.pinfraPft.dto.LocalityDto;
+import edu.utec.pinfraPft.dto.UserDto;
+import edu.utec.pinfraPft.service.DepartmentService;
+import edu.utec.pinfraPft.service.ItrService;
+import edu.utec.pinfraPft.service.LocalityService;
+import edu.utec.pinfraPft.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,17 +22,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 
 @Controller
+@RequiredArgsConstructor
 public class AuthController {
 
-    private final UserServiceImp userService;
+    private final UserService userService;
 
-    private final CareerServiceImpl careerService;
+    private final DepartmentService departmentService;
 
-    @Autowired
-    public AuthController(UserServiceImp userService, CareerServiceImpl careerService) {
-        this.userService = userService;
-        this.careerService = careerService;
-    }
+    private final LocalityService localityService;
+
+    private final ItrService itrService;
 
     @GetMapping("/login")
     public String login(@RequestParam(value = "error", required = false) String error,
@@ -43,27 +46,45 @@ public class AuthController {
 
     @GetMapping("/register")
     public String getRegisterForm(Model model){
-        RegistrationDto user = new RegistrationDto();
-        List<CareerDto> careers = careerService.getCareers();
-        model.addAttribute("careers", careers);
+
+        UserDto user = new UserDto();
+        List<DepartmentDto> departments = departmentService.findAll();
+        List<LocalityDto> localities = localityService.findAll();
+        List<ItrDto> itrs = itrService.findAll();
+
         model.addAttribute("user", user);
+        model.addAttribute("departments", departments);
+        model.addAttribute("localities", localities);
+        model.addAttribute("itrs", itrs);
+
         return "register";
     }
 
     @PostMapping("/register")
-    public String register(@Valid @ModelAttribute("user") RegistrationDto user,
+    public String register(@Valid @ModelAttribute("user") UserDto user,
                            BindingResult result, Model model) {
 
         if(userService.existsByUsername(user.getUsername())) {
             result.rejectValue("username", "error.user", "Username already in use");
         }
 
-        if(userService.existsByEmail(user.getEmail())) {
-            result.rejectValue("email", "error.user", "Email already in use");
+        if(userService.existsByPersonalEmail(user.getPersonalEmail())) {
+            result.rejectValue("personalEmail", "error.user", "Personal email already in use");
+        }
+
+        if(userService.existsByInstitutionalEmail(user.getInstitutionalEmail())) {
+            result.rejectValue("institutionalEmail", "error.user", "Institutional email already in use");
+        }
+
+        if(userService.existsByDocument(user.getDocument())) {
+            result.rejectValue("document", "error.user", "Document already in use");
         }
 
         if(result.hasErrors()) {
             model.addAttribute("user", user);
+            model.addAttribute("departments", departmentService.findAll());
+            model.addAttribute("localities", localityService.findAll());
+            model.addAttribute("itrs", itrService.findAll());
             return "register";
         } else {
             userService.register(user);

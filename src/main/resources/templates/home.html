@@ -28,18 +28,21 @@
                 </li>
                     <li class="nav-item dropdown" data-bs-theme="dark">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <span sec:authorize="hasAnyRole('ADMIN')" th:text="Administration"></span>
-                            <span sec:authorize="hasAnyRole('USER', 'STUDENT')" th:text="User"></span>
+                            <span sec:authorize="hasRole('ADMIN')" th:text="Administration"></span>
+                            <span sec:authorize="hasRole('TEACHER')" th:text="Teacher"></span>
+                            <span sec:authorize="hasRole('STUDENT')" th:text="Student"></span>
                         </a>
-                            <ul sec:authorize="hasAnyRole('ADMIN')" class="dropdown-menu">
+                            <ul sec:authorize="hasRole('ADMIN')" class="dropdown-menu">
                                 <li class="nav-item">
-                                    <a th:href="@{/career}" class="nav-link">Careers</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a th:href="@{/admin}" class="nav-link">Users</a>
+                                    <a class="nav-link" href="#">Admin</a>
                                 </li>
                             </ul>
-                            <ul sec:authorize="hasAnyRole('USER', 'STUDENT')" class="dropdown-menu">
+                            <ul sec:authorize="hasRole('TEACHER')" class="dropdown-menu">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">Teacher</a>
+                                </li>
+                            </ul>
+                            <ul sec:authorize="hasRole('STUDENT')" class="dropdown-menu">
                                 <li class="nav-item">
                                     <form th:action="@{/user/dropout}" method="post" class="d-inline">
                                         <input type="hidden" name="id" th:value="${#authentication.getPrincipal().getUser().getId()}">
@@ -47,7 +50,7 @@
                                     </form>
                                 </li>
                                 <li class="nav-item">
-                                    <a th:href="@{/user/update}" class="nav-link">Update</a>
+                                    <a class="nav-link" href="#">User</a>
                                 </li>
                             </ul>
                     </li>

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -13,9 +14,7 @@ import java.util.List;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @SuperBuilder
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "user_type")
-@DiscriminatorValue(value = "user")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class UserEntity{
 
     @Id @GeneratedValue(strategy =
@@ -26,15 +25,36 @@ public class UserEntity{
 
     private String password;
 
-    private String name;
+    private String firstName;
 
-    private String surname;
+    private String secondName;
 
-    private String email;
+    private String firstSurname;
 
+    private String secondSurname;
+
+    private int document;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
 
-    private String address;
+    private String personalEmail;
+
+    private int phone;
+
+    @ManyToOne
+    @JoinColumn(name = "department_id")
+    private Department department;
+
+    @ManyToOne
+    @JoinColumn(name = "locality_id")
+    private Locality locality;
+
+    private String institutionalEmail;
+
+    @ManyToOne
+    @JoinColumn(name = "itr_id")
+    private Itr itr;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_role", joinColumns =
