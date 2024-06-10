@@ -56,6 +56,9 @@ public class UserEntity{
     @JoinColumn(name = "itr_id")
     private Itr itr;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Claim> claims;
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_role", joinColumns =
     @JoinColumn(name = "user_id", referencedColumnName = "id"),

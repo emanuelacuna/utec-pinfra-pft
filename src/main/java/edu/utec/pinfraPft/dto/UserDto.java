@@ -12,6 +12,7 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 public class UserDto {
@@ -66,5 +67,4 @@ public class UserDto {
     private String area;
 
     private String tutorRole;
-
 }
