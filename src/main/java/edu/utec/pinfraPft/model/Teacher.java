@@ -14,6 +14,6 @@ public class Teacher extends UserEntity {
 
     private String area;
 
-    private String tutorRole;
+    private String teacherRole;
 
 }

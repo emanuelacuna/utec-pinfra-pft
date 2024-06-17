@@ -7,14 +7,16 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.List;
 
-@Data
+@Data @Builder @NoArgsConstructor @AllArgsConstructor
 public class UserDto {
 
     private Long id;
@@ -66,5 +68,8 @@ public class UserDto {
     //If the user is a teacher
     private String area;
 
-    private String tutorRole;
+    private String teacherRole;
+
+    private boolean active;
+
 }

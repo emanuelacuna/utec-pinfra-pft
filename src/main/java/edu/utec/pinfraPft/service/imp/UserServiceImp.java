@@ -11,6 +11,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -66,7 +69,7 @@ public class UserServiceImp implements UserService {
                     .itr(itr)
                     .generation(registration.getGeneration())
                     .active(false)
-                    .role(Arrays.asList(studentRole))
+                    .role(Collections.singletonList(studentRole))
                     .build();
         } else {
             user = Teacher.builder()
@@ -85,9 +88,9 @@ public class UserServiceImp implements UserService {
                     .institutionalEmail(registration.getInstitutionalEmail())
                     .itr(itr)
                     .area(registration.getArea())
-                    .tutorRole(registration.getTutorRole())
+                    .teacherRole(registration.getTeacherRole())
                     .active(false)
-                    .role(Arrays.asList(teacherRole))
+                    .role(Collections.singletonList(teacherRole))
                     .build();
         }
 
@@ -144,4 +147,146 @@ public class UserServiceImp implements UserService {
         user.setActive(!user.isActive());
         userRepository.save(user);
     }
+
+    @Override
+    public void updateUser(UserDto userDto) {
+
+        UserEntity user = userRepository.findById(userDto.getId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        user.setFirstName(userDto.getFirstName());
+        user.setSecondName(userDto.getSecondName());
+        user.setFirstSurname(userDto.getFirstSurname());
+        user.setSecondSurname(userDto.getSecondSurname());
+        user.setDocument(userDto.getDocument());
+        user.setBirthDate(userDto.getBirthDate());
+        user.setPersonalEmail(userDto.getPersonalEmail());
+        user.setPhone(userDto.getPhone());
+
+        user.setDepartment(departmentRepository.findById(userDto.getDepartment())
+                .orElseThrow(() -> new RuntimeException("Department not found")));
+
+        user.setLocality(localityRepository.findById(userDto.getLocality())
+                .orElseThrow(() -> new RuntimeException("Locality not found")));
+
+        user.setInstitutionalEmail(userDto.getInstitutionalEmail());
+
+        user.setItr(itrRepository.findById(userDto.getItr())
+                .orElseThrow(() -> new RuntimeException("Itr not found")));
+
+        if (user instanceof Student student) {
+            student.setGeneration(userDto.getGeneration());
+        } else if (user instanceof Teacher teacher) {
+            teacher.setArea(userDto.getArea());
+            teacher.setTeacherRole(userDto.getTeacherRole());
+        }
+
+        userRepository.save(user);
+    }
+
+    @Override
+    public List<UserDto> findAll() {
+        return userRepository.findAll().stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public UserDto findUserDtoByUsername(String username) {
+        UserEntity user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return mapToDto(user);
+    }
+
+    public UserDto mapToDto(UserEntity user) {
+        UserDto userDto = UserDto.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .password(user.getPassword())
+                .firstName(user.getFirstName())
+                .secondName(user.getSecondName())
+                .firstSurname(user.getFirstSurname())
+                .secondSurname(user.getSecondSurname())
+                .document(user.getDocument())
+                .birthDate(user.getBirthDate())
+                .personalEmail(user.getPersonalEmail())
+                .phone(user.getPhone())
+                .department(user.getDepartment().getId())
+                .locality(user.getLocality().getId())
+                .institutionalEmail(user.getInstitutionalEmail())
+                .itr(user.getItr().getId())
+                .active(user.isActive())
+                .build();
+        if (user instanceof Student student) {
+            userDto.setGeneration(student.getGeneration());
+        } else if (user instanceof Teacher teacher) {
+            userDto.setArea(teacher.getArea());
+            userDto.setTeacherRole(teacher.getTeacherRole());
+        }
+        return userDto;
+    }
+
+    public UserEntity mapToEntity(UserDto userDto) {
+
+        Role studentRole = roleRepository.findByName("ROLE_STUDENT")
+                .orElseThrow(() -> new RuntimeException("Role not found"));
+
+        Role teacherRole = roleRepository.findByName("ROLE_TEACHER")
+                .orElseThrow(() -> new RuntimeException("Role not found"));
+
+        UserEntity user;
+
+        if (userDto.getGeneration() != 0) {
+            user = Student.builder()
+                    .id(userDto.getId())
+                    .username(userDto.getUsername())
+                    .password(userDto.getPassword())
+                    .firstName(userDto.getFirstName())
+                    .secondName(userDto.getSecondName())
+                    .firstSurname(userDto.getFirstSurname())
+                    .secondSurname(userDto.getSecondSurname())
+                    .document(userDto.getDocument())
+                    .birthDate(userDto.getBirthDate())
+                    .personalEmail(userDto.getPersonalEmail())
+                    .phone(userDto.getPhone())
+                    .department(departmentRepository.findById(userDto.getDepartment())
+                            .orElseThrow(() -> new RuntimeException("Department not found")))
+                    .locality(localityRepository.findById(userDto.getLocality())
+                            .orElseThrow(() -> new RuntimeException("Locality not found")))
+                    .institutionalEmail(userDto.getInstitutionalEmail())
+                    .itr(itrRepository.findById(userDto.getItr())
+                            .orElseThrow(() -> new RuntimeException("Itr not found")))
+                    .generation(userDto.getGeneration())
+                    .active(userDto.isActive())
+                    .role(Arrays.asList(studentRole))
+                    .build();
+        } else {
+            user = Teacher.builder()
+                    .id(userDto.getId())
+                    .username(userDto.getUsername())
+                    .password(userDto.getPassword())
+                    .firstName(userDto.getFirstName())
+                    .secondName(userDto.getSecondName())
+                    .firstSurname(userDto.getFirstSurname())
+                    .secondSurname(userDto.getSecondSurname())
+                    .document(userDto.getDocument())
+                    .birthDate(userDto.getBirthDate())
+                    .personalEmail(userDto.getPersonalEmail())
+                    .phone(userDto.getPhone())
+                    .department(departmentRepository.findById(userDto.getDepartment())
+                            .orElseThrow(() -> new RuntimeException("Department not found")))
+                    .locality(localityRepository.findById(userDto.getLocality())
+                            .orElseThrow(() -> new RuntimeException("Locality not found")))
+                    .institutionalEmail(userDto.getInstitutionalEmail())
+                    .itr(itrRepository.findById(userDto.getItr())
+                            .orElseThrow(() -> new RuntimeException("Itr not found")))
+                    .area(userDto.getArea())
+                    .teacherRole(userDto.getTeacherRole())
+                    .active(userDto.isActive())
+                    .role(Arrays.asList(teacherRole))
+                    .build();
+        }
+        return user;
+    }
+
 }
