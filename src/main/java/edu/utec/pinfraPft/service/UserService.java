@@ -25,4 +25,6 @@ public interface UserService {
     boolean existsByDocument(int document);
 
     UserDto findUserDtoByUsername(String name);
+
+    UserDto findUserDtoById(Long id);
 }

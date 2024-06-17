@@ -5,13 +5,12 @@ import edu.utec.pinfraPft.service.DepartmentService;
 import edu.utec.pinfraPft.service.ItrService;
 import edu.utec.pinfraPft.service.LocalityService;
 import edu.utec.pinfraPft.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -35,9 +34,33 @@ public class AdminController {
         return "admin";
     }
 
-    @PostMapping("/update")
-    public String updateUser(@RequestParam Long id) {
+    @PostMapping("/dropout")
+    public String dropout(@RequestParam Long id) {
         userService.changeUserStatus(id);
         return "redirect:/admin";
+    }
+
+    @GetMapping("/update/{id}")
+    public String updateFrom(@PathVariable Long id, Model model) {
+        UserDto userDto = userService.findUserDtoById(id);
+        model.addAttribute("user", userDto);
+        model.addAttribute("departments", departmentService.findAll());
+        model.addAttribute("localities", localityService.findAll());
+        model.addAttribute("itrs", itrService.findAll());
+        return "user-update";
+    }
+
+    @PostMapping("/update")
+    public String updateUser(@Valid @ModelAttribute("user") UserDto userDto, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            model.addAttribute("user", userDto);
+            model.addAttribute("departments", departmentService.findAll());
+            model.addAttribute("localities", localityService.findAll());
+            model.addAttribute("itrs", itrService.findAll());
+            return "user-update";
+        } else {
+            userService.updateUser(userDto);
+            return "redirect:/admin";
+        }
     }
 }

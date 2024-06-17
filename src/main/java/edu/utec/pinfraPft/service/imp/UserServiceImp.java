@@ -122,6 +122,12 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
+    public UserDto findUserDtoById(Long id) {
+        return mapToDto(userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found")));
+    }
+
+    @Override
     public boolean existsByUsername(String username) {
         return userRepository.existsByUsername(username);
     }
@@ -154,6 +160,7 @@ public class UserServiceImp implements UserService {
         UserEntity user = userRepository.findById(userDto.getId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         user.setFirstName(userDto.getFirstName());
         user.setSecondName(userDto.getSecondName());
         user.setFirstSurname(userDto.getFirstSurname());
@@ -180,6 +187,8 @@ public class UserServiceImp implements UserService {
             teacher.setArea(userDto.getArea());
             teacher.setTeacherRole(userDto.getTeacherRole());
         }
+
+        user.setActive(userDto.isActive());
 
         userRepository.save(user);
     }

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -19,7 +20,7 @@
                     <h3 class="text-center">Update</h3>
                 </div>
                 <div class="card-body">
-                    <form method="post" role="form" th:action="@{/user/update}" th:object="${user}">
+                    <form method="post" role="form" th:action="@{(${#authorization.expression('hasRole(''ADMIN'')') ? '/admin/update' : '/user/update'})}" th:object="${user}">
 
                         <div class="form-group mb-3">
                             <input type="hidden" id="id" class="form-control" name="id" th:field="*{id}">
@@ -30,8 +31,10 @@
                         </div>
 
                         <div class="form-group mb-3">
-                            <input type="hidden" id="password" class="form-control" name="password" th:field="*{password}">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" class="form-control" name="password" th:field="*{password}">
                         </div>
+                        <p th:if="${#fields.hasErrors('password')}" class="text-danger" th:errors="*{password}"></p>
 
                         <div class="form-group mb-3">
                             <label for="firstName">First Name</label>
@@ -127,9 +130,18 @@
                             </div>
                         </div>
 
+                        <div sec:authorize="hasRole('ADMIN')" class="form-group mb-3">
+                            <label for="active">Active</label>
+                            <select id="active" class="form-control" name="active" th:field="*{active}">
+                                <option value="true">Yes</option>
+                                <option value="false">No</option>
+                            </select>
+                        </div>
+                        <p th:if="${#fields.hasErrors('active')}" class="text-danger" th:errors="*{active}"></p>
+
                         <div class="text-center">
                             <button type="submit" class="btn btn-primary mr-2">Update</button>
-                            <a class="btn btn-secondary" th:href="@{/home}" type="submit">Cancel</a>
+                            <a class="btn btn-secondary" th:href="@{/home}" type="submit">Go back</a>
                         </div>
                     </form>
                 </div>
