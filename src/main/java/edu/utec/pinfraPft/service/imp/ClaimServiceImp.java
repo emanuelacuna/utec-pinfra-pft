@@ -3,6 +3,7 @@ package edu.utec.pinfraPft.service.imp;
 import edu.utec.pinfraPft.dto.ClaimDto;
 import edu.utec.pinfraPft.model.Claim;
 import edu.utec.pinfraPft.repository.ClaimRepository;
+import edu.utec.pinfraPft.repository.UserRepository;
 import edu.utec.pinfraPft.service.ClaimService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,8 @@ import java.util.List;
 public class ClaimServiceImp implements ClaimService {
 
     private final ClaimRepository claimRepository;
+
+    private final UserRepository userRepository;
 
     private ClaimDto mapToDto(Claim claim) {
         ClaimDto claimDto = new ClaimDto();
@@ -30,6 +33,7 @@ public class ClaimServiceImp implements ClaimService {
         claimDto.setTeacher(claim.getTeacher());
         claimDto.setCredits(claim.getCredits());
         claimDto.setStatus(claim.getStatus());
+        claimDto.setUser(claim.getUser().getId());
         return claimDto;
     }
 
@@ -47,6 +51,8 @@ public class ClaimServiceImp implements ClaimService {
         claim.setTeacher(claimDto.getTeacher());
         claim.setCredits(claimDto.getCredits());
         claim.setStatus(claimDto.getStatus());
+        claim.setUser(userRepository.findById(claimDto.getUser())
+                .orElseThrow(() -> new RuntimeException("User not found")));
         return claim;
     }
 

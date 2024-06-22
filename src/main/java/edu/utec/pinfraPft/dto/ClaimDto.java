@@ -35,4 +35,6 @@ public class ClaimDto {
 
     private String status;
 
+    private Long user;
+
 }
