@@ -1,10 +1,8 @@
 package edu.utec.pinfraPft.controller;
 
+import edu.utec.pinfraPft.dto.ClaimDto;
 import edu.utec.pinfraPft.dto.UserDto;
-import edu.utec.pinfraPft.service.DepartmentService;
-import edu.utec.pinfraPft.service.ItrService;
-import edu.utec.pinfraPft.service.LocalityService;
-import edu.utec.pinfraPft.service.UserService;
+import edu.utec.pinfraPft.service.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -26,6 +24,8 @@ public class AdminController {
     private final LocalityService localityService;
 
     private final ItrService itrService;
+
+    private final ClaimService claimService;
 
     @GetMapping
     public String admin(Model model) {
@@ -62,5 +62,20 @@ public class AdminController {
             userService.updateUser(userDto);
             return "redirect:/admin";
         }
+    }
+
+    @GetMapping("/claim")
+    public String claims(Model model) {
+        List<ClaimDto> claims = claimService.findAll();
+        model.addAttribute("userService", userService);
+        model.addAttribute("claims", claims);
+        return "claim";
+    }
+
+    @PostMapping("/claim/status")
+    public String changeClaimStatus(@RequestParam Long id, @RequestParam String status) {
+        ClaimDto claimDto = claimService.findById(id);
+        claimService.changeStatus(id, status);
+        return "redirect:/admin/claim";
     }
 }

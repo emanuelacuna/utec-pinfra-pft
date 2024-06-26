@@ -14,7 +14,6 @@ public class ApiAuthController {
 
     private final ApiAuthService apiAuthService;
 
-
     @RequestMapping("/")
     public String login(@RequestBody LoginDto loginDto) {
         return apiAuthService.login(loginDto);

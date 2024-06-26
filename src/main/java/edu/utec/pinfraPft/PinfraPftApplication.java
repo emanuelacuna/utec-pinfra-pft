@@ -30,6 +30,8 @@ public class PinfraPftApplication implements CommandLineRunner {
 
 	private final ItrRepository itrRepository;
 
+	private final ClaimRepository claimRepository;
+
 	public static void main(String[] args) {
 		SpringApplication.run(edu.utec.pinfraPft.PinfraPftApplication.class, args);
 	}
