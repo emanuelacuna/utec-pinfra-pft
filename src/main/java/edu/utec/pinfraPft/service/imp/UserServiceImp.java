@@ -298,4 +298,12 @@ public class UserServiceImp implements UserService {
         return user;
     }
 
+    @Override
+    public String getUsernameById(Long id) {
+        return userRepository
+                .findById(id)
+                .map(UserEntity::getUsername)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
+
 }

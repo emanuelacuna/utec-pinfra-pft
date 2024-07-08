@@ -21,4 +21,7 @@ public class Itr {
 
     @OneToMany(mappedBy = "itr", cascade = CascadeType.ALL)
     private List<UserEntity> users;
+
+    @OneToMany(mappedBy = "itr", cascade = CascadeType.ALL)
+    private List<Event> events;
 }

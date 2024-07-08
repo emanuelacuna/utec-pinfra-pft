@@ -27,4 +27,6 @@ public interface UserService {
     UserDto findUserDtoByUsername(String name);
 
     UserDto findUserDtoById(Long id);
+
+    String getUsernameById(Long id);
 }

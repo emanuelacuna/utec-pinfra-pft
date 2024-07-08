@@ -58,6 +58,7 @@ public class ClaimServiceImp implements ClaimService {
 
     @Override
     public ClaimDto save(ClaimDto claimDto) {
+        claimDto.setStatus("PENDING");
         claimDto.setCreated(LocalDateTime.now());
         Claim claim = claimRepository.save(mapToEntity(claimDto));
         return mapToDto(claim);
@@ -108,5 +109,14 @@ public class ClaimServiceImp implements ClaimService {
                 .stream()
                 .map(this::mapToDto)
                 .toList();
+    }
+
+    @Override
+    public void changeStatus(Long id, String status) {
+        Claim claim = claimRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Claim not found"));
+        claim.setStatus(status);
+        claim.setUpdated(LocalDateTime.now());
+        mapToDto(claimRepository.save(claim));
     }
 }
