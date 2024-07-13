@@ -37,16 +37,10 @@ public class ApiAuthService {
 
         UserEntity user = userService.findByUsername(loginDto.getUsername());
 
-        //System.out.println(loginDto.getPassword());
-        //System.out.println(user.getPassword());
-        //System.out.println(passwordEncoder.encode(loginDto.getPassword()));
 
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        // else if(passwordEncoder.encode(loginDto.getPassword()).equals(user.getPassword())) {
-        //return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        // }
         else if(!user.isActive()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }else{

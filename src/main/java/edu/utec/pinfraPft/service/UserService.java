@@ -3,6 +3,7 @@ package edu.utec.pinfraPft.service;
 import edu.utec.pinfraPft.dto.UserDto;
 import edu.utec.pinfraPft.model.UserEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface UserService {
@@ -29,4 +30,6 @@ public interface UserService {
     UserDto findUserDtoById(Long id);
 
     String getUsernameById(Long id);
+
+    List<UserDto> findStudentsWithClaims();
 }

@@ -68,6 +68,7 @@ public class UserServiceImp implements UserService {
                     .institutionalEmail(registration.getInstitutionalEmail())
                     .itr(itr)
                     .generation(registration.getGeneration())
+                    .gender(registration.getGender())
                     .active(false)
                     .role(Collections.singletonList(studentRole))
                     .build();
@@ -85,6 +86,7 @@ public class UserServiceImp implements UserService {
                     .phone(registration.getPhone())
                     .department(department)
                     .locality(locality)
+                    .gender(registration.getGender())
                     .institutionalEmail(registration.getInstitutionalEmail())
                     .itr(itr)
                     .area(registration.getArea())
@@ -306,4 +308,11 @@ public class UserServiceImp implements UserService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
+    @Override
+    public List<UserDto> findStudentsWithClaims() {
+        return userRepository.findAll().stream()
+                .filter(user -> !user.getClaims().isEmpty())
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
+    }
 }

@@ -42,6 +42,8 @@ public class UserEntity{
 
     private int phone;
 
+    private String gender;
+
     @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;

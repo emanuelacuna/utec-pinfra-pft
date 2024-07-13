@@ -54,7 +54,7 @@ public class PinfraPftApplication implements CommandLineRunner {
 			roleRepository.save(studentRole);
 		}
 
-		/*Department department1 = Department.builder().name("Departamento de prueba 1").build();
+		Department department1 = Department.builder().name("Departamento de prueba 1").build();
 		Department department2 = Department.builder().name("Departamento de prueba 1").build();
 		List<Department> departments = Arrays.asList(department1, department2);
 		departmentRepository.saveAll(departments);
@@ -88,7 +88,7 @@ public class PinfraPftApplication implements CommandLineRunner {
 				.active(true)
 				.build();
 
-		userRepository.save(admin);*/
+		userRepository.save(admin);
 
 	}
 }

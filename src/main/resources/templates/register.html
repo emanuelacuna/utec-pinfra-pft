@@ -55,6 +55,12 @@
                         <p th:if="${#fields.hasErrors('secondSurname')}" class="text-danger" th:errors="*{secondSurname}"></p>
 
                         <div class="form-group mb-3">
+                            <label for="gender">Gender</label>
+                            <input type="text" id="gender" class="form-control" name="gender" th:field="*{gender}">
+                        </div>
+                        <p th:if="${#fields.hasErrors('gender')}" class="text-danger" th:errors="*{gender}"></p>
+
+                        <div class="form-group mb-3">
                             <label for="document">Document</label>
                             <input type="text" id="document" class="form-control" name="document" th:field="*{document}">
                         </div>
