@@ -1,0 +1,157 @@
+@startuml
+
+class UserEntity {
+    Long id
+    String username
+    String password
+    String firstName
+    String secondName
+    String firstSurname
+    String secondSurname
+    int document
+    LocalDate birthDate
+    String personalEmail
+    int phone
+    String gender
+    String institutionalEmail
+    boolean active
+    Department department
+    Locality locality
+    Itr itr
+    List<Claim> claims
+    List<Role> role
+}
+
+class Teacher extends UserEntity {
+    String area
+    String teacherRole
+    List<Event> events
+}
+
+class Student extends UserEntity {
+    int generation
+    Set<Attendance> attendances
+    List<Certificate> certificates
+    List<Justification> justifications
+}
+
+class Role {
+    Long id
+    String name
+    List<UserEntity> users
+}
+
+class Locality {
+    Long id
+    String name
+    Department department
+    List<UserEntity> users
+}
+
+class Justification {
+    Long id
+    String event
+    String information
+    LocalDateTime date
+    String status
+    Student student
+}
+
+class Itr {
+    Long id
+    String name
+    List<UserEntity> users
+    List<Event> events
+}
+
+class Event {
+    Long id
+    String title
+    String eventType
+    LocalDateTime startingDate
+    LocalDateTime endingDate
+    String mode
+    Itr itr
+    String location
+    List<Teacher> teachers
+    String status
+    Set<Attendance> attendances
+}
+
+class Department {
+    Long id
+    String name
+    List<Locality> localities
+    List<UserEntity> users
+}
+
+class Claim {
+    Long id
+    String title
+    String description
+    LocalDateTime created
+    LocalDateTime updated
+    String eventVme
+    String activityApe
+    int semester
+    LocalDate date
+    String teacher
+    int credits
+    String status
+    UserEntity user
+}
+
+class Certificate {
+    Long id
+    String certificateType
+    String event
+    String information
+    LocalDateTime date
+    String status
+    Student student
+}
+
+class Attendance {
+    Long id
+    Event event
+    Student student
+    String status
+    int qualification
+}
+
+UserEntity --> Department : belongs to
+UserEntity --> Locality : belongs to
+UserEntity --> Itr : belongs to
+UserEntity --> Claim : has many
+UserEntity --> Role : has many
+
+Teacher --> Event : participates in
+Student --> Attendance : has many
+Student --> Certificate : has many
+Student --> Justification : has many
+
+Role --> UserEntity : has many
+
+Locality --> Department : belongs to
+Locality --> UserEntity : has many
+
+Justification --> Student : belongs to
+
+Itr --> UserEntity : has many
+Itr --> Event : organizes many
+
+Event --> Itr : belongs to
+Event --> Teacher : has many
+Event --> Attendance : includes many
+
+Department --> Locality : has many
+Department --> UserEntity : has many
+
+Claim --> UserEntity : belongs to
+
+Certificate --> Student : belongs to
+
+Attendance --> Event : belongs to
+Attendance --> Student : belongs to
+
+@enduml

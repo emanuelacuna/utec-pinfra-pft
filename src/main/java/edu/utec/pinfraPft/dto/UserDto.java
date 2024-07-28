@@ -29,7 +29,7 @@ public class UserDto {
 
     @NotEmpty(message = "Password cannot be empty")
     @Size(min=3 , max = 20, message = "La contraseña no cumple los requisitos de tamaño, min 3, max 20")
-    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{3,}$", message = "La contraseña debe contener al menos una letra y un número")
+    //@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{3,}$", message = "La contraseña debe contener al menos una letra y un número")
     private String password;
 
     @NotEmpty(message = "First name cannot be empty")
