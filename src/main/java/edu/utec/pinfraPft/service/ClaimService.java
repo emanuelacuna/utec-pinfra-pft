@@ -19,4 +19,5 @@ public interface ClaimService {
     List<ClaimDto> findAllByUserId(Long id);
 
     void changeStatus(Long id, String status);
+
 }
