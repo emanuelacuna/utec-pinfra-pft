@@ -52,7 +52,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form th:action="@{/api/claim/update}" method="post">
+                <form th:action="@{/user/claim/update}" method="post">
                     <input type="hidden" name="id" th:value="${claim.id}">
                     <div class="form-group mb-3">
                         <label for="title">Title</label>
@@ -96,7 +96,7 @@
                 Are you sure you want to delete this claim?
             </div>
             <div class="modal-footer">
-                <form th:action="@{/api/claim/delete}" method="post">
+                <form th:action="@{/user/claim/delete}" method="post">
                     <input type="hidden" name="id" th:value="${claim.id}">
                     <button type="submit" class="btn btn-danger">Delete</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>

@@ -15,7 +15,7 @@
                     <h3 class="text-center">Create New Claim</h3>
                 </div>
                 <div class="card-body">
-                    <form method="post" role="form" th:action="@{/api/claim/create}">
+                    <form method="post" role="form" th:action="@{/user/claim/create}">
                         <div class="form-group mb-3">
                             <label for="title">Title</label>
                             <input type="text" id="title" class="form-control" name="title" required>
@@ -24,6 +24,17 @@
                         <div class="form-group mb-3">
                             <label for="description">Description</label>
                             <textarea id="description" class="form-control" name="description" rows="3" required></textarea>
+                        </div>
+
+                        <!-- Selector para APE o VME -->
+                        <div class="form-group mb-3">
+                            <label>Type</label>
+                            <div>
+                                <input type="radio" id="eventVme" name="eventVme" value="VME" required onclick="toggleSelection('activityApe','eventVme')">
+                                <label for="eventVme">VME</label>
+                                <input type="radio" id="activityApe" name="activityApe" value="APE" required onclick="toggleSelection('eventVme','activityApe')">
+                                <label for="activityApe">APE</label>
+                            </div>
                         </div>
 
                         <div class="form-group mb-3">
@@ -35,6 +46,12 @@
                             <label for="credits">Credits</label>
                             <input type="number" id="credits" class="form-control" name="credits" required>
                         </div>
+
+                        <div class="form-group mb-3">
+                            <label for="date">Date</label>
+                            <input type="date" id="date" class="form-control" name="date" required>
+                        </div>
+
 
                         <div class="form-group mb-3">
                             <label for="semester">Semester</label>
@@ -53,5 +70,15 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script>
+    // Función para deseleccionar el otro radio button
+    function toggleSelection(otherRadioId,radioActualId) {
+        const otherRadio = document.getElementById(otherRadioId);
+        const radioActual = document.getElementById(radioActualId);
+        otherRadio.checked = false;
+        otherRadio.required= false;
+        radioActual.required=true;
+    }
+</script>
 </body>
 </html>

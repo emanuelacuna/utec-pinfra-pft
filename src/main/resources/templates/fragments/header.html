@@ -40,10 +40,26 @@
                         <li class="nav-item">
                             <a class="btn-link nav-link" th:href="@{/admin/claim}" type="submit">Claims</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="btn-link nav-link" th:href="@{/event/new}" type="submit">New Event</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="btn-link nav-link" th:href="@{/event/list}" type="submit">Events List</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn-link nav-link" th:href="@{/attendances/attendancesAnalist}" type="submit">Register Attendance</a>
+                        </li>
                     </ul>
                     <ul sec:authorize="hasRole('TEACHER')" class="dropdown-menu">
                         <li class="nav-item">
                             <a class="btn-link nav-link" th:href="@{/user/update}" type="submit">Update</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn-link nav-link" th:href="@{/event/mylist}" type="submit">My Events List</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn-link nav-link" th:href="@{/attendances/attendancesTeacher}" type="submit">Register Attendance</a>
                         </li>
                         <li class="nav-item">
                             <form th:action="@{/user/dropout}" method="post" class="d-inline">
@@ -55,13 +71,16 @@
                     <!-- Opciones para STUDENT -->
                     <ul sec:authorize="hasRole('STUDENT')" class="dropdown-menu">
                         <li class="nav-item">
-                            <a class="btn-link nav-link" th:href="@{/api/claim/list}" type="submit">My Claims</a>
+                            <a class="btn-link nav-link" th:href="@{/user/claim/list}" type="submit">My Claims</a>
                         </li>
                         <li class="nav-item">
-                            <a class="btn-link nav-link" th:href="@{/api/claim/new}" type="submit">New Claim</a>
+                            <a class="btn-link nav-link" th:href="@{/user/claim/new}" type="submit">New Claim</a>
                         </li>
                         <li class="nav-item">
-                            <a class="btn-link nav-link" th:href="@{/user/update}" type="submit">Update</a>
+                            <a class="btn-link nav-link" th:href="@{/constancy/new}" type="submit">New Constancy</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn-link nav-link" th:href="@{/user/update}" type="submit">Update Personal Data</a>
                         </li>
                         <li class="nav-item">
                             <form th:action="@{/user/dropout}" method="post" class="d-inline">

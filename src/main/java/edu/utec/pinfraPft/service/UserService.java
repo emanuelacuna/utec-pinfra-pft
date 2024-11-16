@@ -2,6 +2,7 @@ package edu.utec.pinfraPft.service;
 
 import edu.utec.pinfraPft.dto.UserDto;
 import edu.utec.pinfraPft.model.UserEntity;
+import org.apache.catalina.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,4 +33,8 @@ public interface UserService {
     String getUsernameById(Long id);
 
     List<UserDto> findStudentsWithClaims();
+
+    List<UserDto> getAllTeachers();
+
+    List<UserDto> getAllStudents();
 }

@@ -26,4 +26,7 @@ public class Locality {
     @OneToMany(mappedBy = "locality", cascade = CascadeType.ALL)
     private List<UserEntity> users;
 
+    @OneToMany(mappedBy = "locality", cascade = CascadeType.ALL)
+    private List<Itr> itrs;
+
 }

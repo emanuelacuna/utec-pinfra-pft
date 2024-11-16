@@ -315,4 +315,15 @@ public class UserServiceImp implements UserService {
                 .map(this::mapToDto)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<UserDto> getAllTeachers() {
+        // Usa el ID del rol de Teacher (en este caso, 2)
+        return userRepository.findUsersByRoleId(2L).stream().map(this::mapToDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<UserDto> getAllStudents() {
+        return userRepository.findUsersByRoleId(3L).stream().map(this::mapToDto).collect(Collectors.toList());
+    }
 }

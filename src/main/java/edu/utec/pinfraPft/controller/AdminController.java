@@ -1,10 +1,14 @@
 package edu.utec.pinfraPft.controller;
 
+import edu.utec.pinfraPft.dto.ActionTakenDto;
+import edu.utec.pinfraPft.dto.AttendanceDto;
 import edu.utec.pinfraPft.dto.ClaimDto;
 import edu.utec.pinfraPft.dto.UserDto;
+import edu.utec.pinfraPft.model.Attendance;
 import edu.utec.pinfraPft.service.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,6 +30,8 @@ public class AdminController {
     private final ItrService itrService;
 
     private final ClaimService claimService;
+
+    private final ActionTakenService actionTakenService;
 
     @GetMapping
     public String admin(Model model) {
@@ -78,4 +84,28 @@ public class AdminController {
         claimService.changeStatus(id, status);
         return "redirect:/admin/claim";
     }
+
+    @PostMapping("/claim/actionTaken")
+    public String changeClaimStatusAndRegisterAction(@RequestParam Long claimIdInput,
+                                                     @RequestParam String status,
+                                                     @RequestParam String actionTaken) {
+        // Cambiar el estado del reclamo
+        claimService.changeStatus(claimIdInput, status);
+
+        UserDto userDto = userService.findUserDtoByUsername
+                (SecurityContextHolder.getContext().getAuthentication().getName());
+
+        // Registrar la acción en Attendance
+        ActionTakenDto actionTakenDto = new ActionTakenDto();
+        actionTakenDto.setClaim(claimIdInput); // Asignar el reclamo asociado
+        actionTakenDto.setAdmin(userDto.getId()); // Asignar el admin que realizo la accion
+        actionTakenDto.setStatus(status);
+        actionTakenDto.setActionTaken(actionTaken); // Registrar la acción tomada
+
+        actionTakenService.save(actionTakenDto); // Guardar en la base de datos
+
+        return "redirect:/admin/claim";
+    }
+
+
 }

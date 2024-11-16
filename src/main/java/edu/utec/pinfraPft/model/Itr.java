@@ -24,4 +24,8 @@ public class Itr {
 
     @OneToMany(mappedBy = "itr", cascade = CascadeType.ALL)
     private List<Event> events;
+
+    @ManyToOne
+    @JoinColumn(name = "locality_id")
+    private Locality locality;
 }

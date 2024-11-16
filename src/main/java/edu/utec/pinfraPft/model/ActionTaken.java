@@ -9,21 +9,22 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @Entity
-public class Attendance {
-
+public class ActionTaken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "event_id")
-    private Event event;
+    @JoinColumn(name = "claim_id")
+    private Claim claim;
 
     @ManyToOne
-    @JoinColumn(name = "student_id")
-    private UserEntity student;
+    @JoinColumn(name = "admin_id")
+    private UserEntity admin;
 
     private String status;
 
-    private int qualification;
+    private String actionTaken;
+
+
 }

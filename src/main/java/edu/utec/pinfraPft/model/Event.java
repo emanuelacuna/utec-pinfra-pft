@@ -40,11 +40,14 @@ public class Event {
     @JoinTable(name = "event_teacher",
             joinColumns = @JoinColumn(name = "event_id"),
             inverseJoinColumns = @JoinColumn(name = "teacher_id"))
-    private List<Teacher> teachers;
+    private List<UserEntity> teachers;
 
     private String status;
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Attendance> attendances = new HashSet<>();
+    private List<Attendance> attendances;
 
+    // Relación con Constancy
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Constancy> constancies;
 }

@@ -17,9 +17,6 @@ public class Student extends UserEntity {
 
     private int generation;
 
-    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Attendance> attendances = new HashSet<>();
-
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     private List<Certificate> certificates;
 
