@@ -35,17 +35,19 @@
                     </a>
                     <ul sec:authorize="hasRole('ADMIN')" class="dropdown-menu">
                         <li class="nav-item">
-                            <a class="btn-link nav-link" th:href="@{/admin}" type="submit">Users</a>
+                            <a class="btn-link nav-link" th:href="@{/admin}" type="submit">Users List</a>
                         </li>
                         <li class="nav-item">
-                            <a class="btn-link nav-link" th:href="@{/admin/claim}" type="submit">Claims</a>
+                            <a class="btn-link nav-link" th:href="@{/admin/claim}" type="submit">Claims List</a>
                         </li>
                         <li class="nav-item">
                             <a class="btn-link nav-link" th:href="@{/event/new}" type="submit">New Event</a>
                         </li>
-
                         <li class="nav-item">
                             <a class="btn-link nav-link" th:href="@{/event/list}" type="submit">Events List</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn-link nav-link" th:href="@{/constancy/list}" type="submit">Constancies List</a>
                         </li>
                         <li class="nav-item">
                             <a class="btn-link nav-link" th:href="@{/attendances/attendancesAnalist}" type="submit">Register Attendance</a>
@@ -71,13 +73,16 @@
                     <!-- Opciones para STUDENT -->
                     <ul sec:authorize="hasRole('STUDENT')" class="dropdown-menu">
                         <li class="nav-item">
-                            <a class="btn-link nav-link" th:href="@{/user/claim/list}" type="submit">My Claims</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="btn-link nav-link" th:href="@{/user/claim/new}" type="submit">New Claim</a>
                         </li>
                         <li class="nav-item">
+                            <a class="btn-link nav-link" th:href="@{/user/claim/list}" type="submit">My Claims</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="btn-link nav-link" th:href="@{/constancy/new}" type="submit">New Constancy</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn-link nav-link" th:href="@{/constancy/myList}" type="submit">My Constancies</a>
                         </li>
                         <li class="nav-item">
                             <a class="btn-link nav-link" th:href="@{/user/update}" type="submit">Update Personal Data</a>

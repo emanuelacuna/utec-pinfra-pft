@@ -60,7 +60,7 @@ public class ConstancyController {
        List<ConstancyDto> constancies = constancyService.findAll();
        List<EventDto> allEvents = eventService.findAll();
        for (ConstancyDto constancy : constancies) {
-           UserDto constancyStudent = userService.findUserDtoByUsername(userService.getUsernameById(constancy.getId()));
+           UserDto constancyStudent = userService.findUserDtoByUsername(userService.getUsernameById(constancy.getStudent()));
            constancy.setStudentName(constancyStudent.getFirstName()+" "+constancyStudent.getFirstSurname()+" "+constancyStudent.getSecondSurname());
            for(EventDto event : allEvents){
                if(constancy.getEvent().equals(event.getId())){
@@ -71,7 +71,7 @@ public class ConstancyController {
        }
        model.addAttribute("constancies", constancies);
 
-        return "constancies/listConstancy";
+       return "constancies/listConstancy";
     }
 
 
