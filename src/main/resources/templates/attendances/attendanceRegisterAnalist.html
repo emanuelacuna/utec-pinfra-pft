@@ -24,32 +24,20 @@
             <table id="attendanceAnalist" class="table table-hover mt-4">
                 <thead>
                 <tr>
-                    <th>First Name</th>
-                    <th>First Surname</th>
-                    <th>Second Surname</th>
-                    <th>Document</th>
-                    <th>Email</th>
-                    <th>Institutional Email</th>
-                    <th>Phone</th>
+                    <th>Student Name</th>
+                    <th>Event Title</th>
                     <th></th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="student : ${students}">
-                    <td th:text="${student.firstName}"></td>
-                    <td th:text="${student.firstSurname}"></td>
-                    <td th:text="${student.secondSurname}"></td>
-                    <td th:text="${student.document}"></td>
-                    <td th:text="${student.personalEmail}"></td>
-                    <td th:text="${student.institutionalEmail}"></td>
-                    <td th:text="${student.phone}"></td>
-
+                <tr th:each="attendance : ${attendances}">
+                    <td th:text="${attendance.nombreStudent}"></td>
+                    <td th:text="${attendance.nombreEvento}"></td>
                     <td>
-                        <button class="btn btn-sm btn-warning"
-                                data-bs-toggle="modal"
-                                th:attr="data-bs-target='#attendanceModal',
-                                 data-student-id=${student.id},
-                                 data-student-name=${student.firstName+' '+student.firstSurname}">
+                        <button class="btn btn-sm btn-warning" data-bs-toggle="modal" th:attr="data-bs-target='#attendanceModal',
+                        data-attendance-id=${attendance.id},
+                        data-student-name=${attendance.nombreStudent},
+                        data-event-title=${attendance.nombreEvento}">
                             Register Attendance
                         </button>
                     </td>
@@ -70,23 +58,14 @@
             </div>
             <form th:action="@{/attendances/register}" method="post">
                 <div class="modal-body">
-                    <input type="hidden" name="student" id="studentId">
+                    <input type="hidden" name="id" id="idAttendance">
                     <div class="mb-3">
                         <label for="studentName" class="form-label">Student</label>
                         <input type="text" class="form-control" id="studentName" readonly>
                     </div>
-                    <div class="form-group mb-3" id="eventsContainer">
-                        <label for="events">Events</label>
-                        <select id="events" name="event" class="form-control">
-                            <option th:each="event : ${events}"
-                                    th:value="${event.id}"
-                                    th:text="${event.title}">Event title</option>
-                        </select>
-                    </div>
-
-                    <!-- Contenedor del mensaje de no eventos -->
-                    <div id="noEventsMessageContainer" class="d-none">
-                        <p class="text-danger">This student already has attendance in all events.</p>
+                    <div class="mb-3">
+                        <label for="eventTitle" class="form-label">Event</label>
+                        <input type="text" class="form-control" id="eventTitle" readonly>
                     </div>
 
                     <div class="form-group mb-3">
@@ -148,57 +127,15 @@
     const attendanceModal = document.getElementById('attendanceModal');
     attendanceModal.addEventListener('show.bs.modal', function (event) {
         const button = event.relatedTarget;
-        const studentId = button.getAttribute('data-student-id');
+        const attendanceId = button.getAttribute('data-attendance-id')
         const studentName = button.getAttribute('data-student-name');
+        const eventTitle = button.getAttribute('data-event-title');
 
         // Actualiza los campos del modal
-        document.getElementById('studentId').value = studentId;
         document.getElementById('studentName').value = studentName;
+        document.getElementById('eventTitle').value = eventTitle;
+        document.getElementById('idAttendance').value=attendanceId;
 
-        fetch(`/attendances/filter-events`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: `studentId=${studentId}`
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log("Response from backend:", data); // Verificar el JSON recibido
-                const eventsContainer = document.getElementById('eventsContainer');
-                const noEventsMessageContainer = document.getElementById('noEventsMessageContainer');
-                const eventsSelect = document.getElementById('events');
-                const acceptButton = document.getElementById('acceptButton');
-
-                // Limpia el selector de eventos
-                eventsSelect.innerHTML = "";
-
-                if (data.hasEvents) {
-                    eventsContainer.classList.remove('d-none');
-                    noEventsMessageContainer.classList.add('d-none');
-                    acceptButton.classList.remove('d-none'); // Muestra el botón de aceptar
-
-                    data.events.forEach(event => {
-                        const option = document.createElement('option');
-                        option.value = event.id;
-                        option.textContent = event.title;
-                        eventsSelect.appendChild(option);
-                    });
-                } else {
-                    eventsContainer.classList.add('d-none');
-                    noEventsMessageContainer.classList.remove('d-none');
-                    acceptButton.classList.add('d-none'); // Oculta el botón de aceptar
-                }
-            })
-            .catch(error => {
-                console.error("Error fetching events:", error);
-                alert("An error occurred while fetching events. Please try again later.");
-            });
     });
 
 </script>

@@ -6,6 +6,7 @@ import lombok.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -36,8 +37,8 @@ public class Claim {
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
-    @OneToMany(mappedBy = "actionTaken", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<ActionTaken> actionsTaken = new HashSet<>();
+    @OneToMany(mappedBy = "claim", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ActionTaken> actionsTaken;
 
 
 }

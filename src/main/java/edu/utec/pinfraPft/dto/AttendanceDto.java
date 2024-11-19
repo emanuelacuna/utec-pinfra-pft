@@ -11,4 +11,7 @@ public class AttendanceDto {
     private String status;
     private int qualification;
 
+    private String nombreEvento;
+    private String nombreStudent;
+
 }

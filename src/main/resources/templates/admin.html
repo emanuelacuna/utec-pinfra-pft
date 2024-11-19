@@ -25,7 +25,7 @@
 <body>
 <div th:insert="~{fragments/header :: header}"></div>
 
-<div class="mt-3 mb-3" style="width: 90%; margin: 0 auto;">
+<div class="mt-3 mb-3" style="width: 95%; margin: 0 auto;">
     <div class="card shadow">
         <div class="card-header">
             <div class="row">
@@ -57,7 +57,8 @@
                         <th>Area</th>
                         <th>Teacher Role</th>
                         <th>Status</th>
-                        <th>Action</th>
+                        <th></th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -68,7 +69,7 @@
                         <td th:text="${user.firstSurname}"></td>
                         <td th:text="${user.secondSurname}"></td>
                         <td th:text="${user.document}"></td>
-                        <td th:text="${user.birthDate}"></td>
+                        <td th:text="${user.age}"></td>
                         <td th:text="${user.personalEmail}"></td>
                         <td th:text="${user.phone}"></td>
                         <td th:text="${user.department}"></td>
@@ -81,10 +82,12 @@
                         <td th:text="${user.isActive()} ? 'Active' : 'Inactive'"></td>
                         <td>
                             <a class="btn btn-primary btn-sm" th:href="@{/admin/update/{id}(id=${user.id})}">Update</a>
+                        </td>
+                        <td>
                             <form th:action="@{/admin/dropout}" method="post" class="d-inline">
                                 <input type="hidden" name="id" th:value="${user.id}">
                                 <input type="hidden" name="active" th:value="${user.isActive()} ? 'false' : 'true'">
-                                <button type="submit" th:class="${user.isActive()} ? 'btn btn-danger' : 'btn btn-success'">
+                                <button type="submit" th:class="${user.isActive()} ? 'btn btn-danger btn-sm' : 'btn btn-success btn-sm'">
                                     <span th:text="${user.isActive()} ? 'Deactivate' : 'Activate'"></span>
                                 </button>
                             </form>
@@ -111,7 +114,7 @@
         $('#user-list').DataTable({
             "pagingType": "simple_numbers",
             "searching": true,
-            "lengthMenu": [10, 25, 50, 100],
+            "lengthMenu": [5, 15, 15, 15],
             "language": {
                 "lengthMenu": "Mostrar _MENU_ filas por página",
                 "zeroRecords": "No se encontraron resultados",

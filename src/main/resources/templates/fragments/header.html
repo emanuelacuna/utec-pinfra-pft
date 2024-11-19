@@ -50,7 +50,13 @@
                             <a class="btn-link nav-link" th:href="@{/constancy/list}" type="submit">Constancies List</a>
                         </li>
                         <li class="nav-item">
+                            <a class="btn-link nav-link" th:href="@{/attendances/calls}" type="submit">Register Event Call</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="btn-link nav-link" th:href="@{/attendances/attendancesAnalist}" type="submit">Register Attendance</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn-link nav-link" th:href="@{/admin/reports}" type="submit">Reports</a>
                         </li>
                     </ul>
                     <ul sec:authorize="hasRole('TEACHER')" class="dropdown-menu">

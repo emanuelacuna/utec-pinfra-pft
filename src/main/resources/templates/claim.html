@@ -16,7 +16,7 @@
 <body>
 <div th:insert="~{fragments/header :: header}"></div>
 <div class="container-fluid mt-3 mb-3"> <!-- Cambiar a container-fluid para usar todo el ancho -->
-    <div class="card shadow" style="width: 80%; margin: 0 auto;">
+    <div class="card shadow" style="width: 95%; margin: 0 auto;">
         <div class="card-header">
             <h3>Claims List</h3>
         </div>
@@ -45,12 +45,12 @@
                         <td th:text="${claim.id}"></td>
                         <td th:text="${claim.title}"></td>
                         <td th:text="${claim.description}"></td>
-                        <td th:text="${claim.created}"></td>
-                        <td th:text="${claim.updated}"></td>
+                        <td th:text="${#temporals.format(claim.created, 'dd/MM/yyyy HH:mm')}"></td>
+                        <td th:text="${#temporals.format(claim.updated, 'dd/MM/yyyy HH:mm')}"></td>
                         <td th:text="${claim.eventVme}"></td>
                         <td th:text="${claim.activityApe}"></td>
                         <td th:text="${claim.semester}"></td>
-                        <td th:text="${claim.date}"></td>
+                        <td th:text="${#temporals.format(claim.date, 'dd/MM/yyyy HH:mm')}"></td>
                         <td th:text="${claim.teacher}"></td>
                         <td th:text="${claim.credits}"></td>
                         <td th:text="${claim.status}"></td>

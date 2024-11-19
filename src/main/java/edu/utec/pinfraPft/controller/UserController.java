@@ -12,6 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -79,6 +81,8 @@ public class UserController {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         UserDto userDto = userService.findUserDtoByUsername(username);
         claimDto.setUser(userDto.getId());
+        claimDto.setCreated(LocalDateTime.now());
+        claimDto.setUpdated(LocalDateTime.now());
         claimService.save(claimDto);
         return "redirect:/user/claim/list";
     }
@@ -99,6 +103,7 @@ public class UserController {
     // Método para actualizar un reclamo
     @PostMapping("/claim/update")
     public String updateClaim(@ModelAttribute("claim") ClaimDto claimDto) {
+        claimDto.setUpdated(LocalDateTime.now());
         claimService.update(claimDto.getId(),claimDto);
         return "redirect:/user/claim/list";
     }

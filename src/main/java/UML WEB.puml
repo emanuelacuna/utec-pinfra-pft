@@ -22,17 +22,16 @@ class UserEntity {
     List<Role> role
 }
 
+class Student extends UserEntity {
+    int generation
+    List<Certificate> certificates
+    List<Justification> justifications
+}
+
 class Teacher extends UserEntity {
     String area
     String teacherRole
     List<Event> events
-}
-
-class Student extends UserEntity {
-    int generation
-    Set<Attendance> attendances
-    List<Certificate> certificates
-    List<Justification> justifications
 }
 
 class Role {
@@ -46,36 +45,7 @@ class Locality {
     String name
     Department department
     List<UserEntity> users
-}
-
-class Justification {
-    Long id
-    String event
-    String information
-    LocalDateTime date
-    String status
-    Student student
-}
-
-class Itr {
-    Long id
-    String name
-    List<UserEntity> users
-    List<Event> events
-}
-
-class Event {
-    Long id
-    String title
-    String eventType
-    LocalDateTime startingDate
-    LocalDateTime endingDate
-    String mode
-    Itr itr
-    String location
-    List<Teacher> teachers
-    String status
-    Set<Attendance> attendances
+    List<Itr> itrs
 }
 
 class Department {
@@ -83,6 +53,14 @@ class Department {
     String name
     List<Locality> localities
     List<UserEntity> users
+}
+
+class Itr {
+    Long id
+    String name
+    Locality locality
+    List<UserEntity> users
+    List<Event> events
 }
 
 class Claim {
@@ -99,6 +77,38 @@ class Claim {
     int credits
     String status
     UserEntity user
+    List<ActionTaken> actionsTaken
+}
+
+class ActionTaken {
+    Long id
+    Claim claim
+    UserEntity admin
+    String status
+    String actionTaken
+}
+
+class Event {
+    Long id
+    String title
+    String eventType
+    LocalDateTime startingDate
+    LocalDateTime endingDate
+    String mode
+    Itr itr
+    String location
+    String status
+    List<UserEntity> teachers
+    List<Attendance> attendances
+    List<Constancy> constancies
+}
+
+class Attendance {
+    Long id
+    Event event
+    UserEntity student
+    String status
+    int qualification
 }
 
 class Certificate {
@@ -111,12 +121,23 @@ class Certificate {
     Student student
 }
 
-class Attendance {
+class Constancy {
     Long id
+    String constancyType
     Event event
-    Student student
+    String info
+    LocalDateTime date
+    UserEntity student
     String status
-    int qualification
+}
+
+class Justification {
+    Long id
+    String event
+    String information
+    LocalDateTime date
+    String status
+    Student student
 }
 
 UserEntity --> Department : belongs to
@@ -125,33 +146,42 @@ UserEntity --> Itr : belongs to
 UserEntity --> Claim : has many
 UserEntity --> Role : has many
 
-Teacher --> Event : participates in
-Student --> Attendance : has many
 Student --> Certificate : has many
 Student --> Justification : has many
+
+Teacher --> Event : teaches
 
 Role --> UserEntity : has many
 
 Locality --> Department : belongs to
 Locality --> UserEntity : has many
-
-Justification --> Student : belongs to
-
-Itr --> UserEntity : has many
-Itr --> Event : organizes many
-
-Event --> Itr : belongs to
-Event --> Teacher : has many
-Event --> Attendance : includes many
+Locality --> Itr : has many
 
 Department --> Locality : has many
 Department --> UserEntity : has many
 
+Itr --> Locality : belongs to
+Itr --> UserEntity : has many
+Itr --> Event : organizes many
+
 Claim --> UserEntity : belongs to
+Claim --> ActionTaken : has many
+
+ActionTaken --> Claim : belongs to
+ActionTaken --> UserEntity : handled by
+
+Event --> Itr : belongs to
+Event --> Attendance : includes many
+Event --> Constancy : generates many
+
+Attendance --> Event : belongs to
+Attendance --> UserEntity : involves
 
 Certificate --> Student : belongs to
 
-Attendance --> Event : belongs to
-Attendance --> Student : belongs to
+Constancy --> Event : refers to
+Constancy --> UserEntity : belongs to
+
+Justification --> Student : belongs to
 
 @enduml

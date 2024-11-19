@@ -69,9 +69,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/login", "/register", "/css/**", "/images/**" ).permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/event/new", "/event/list", "/event/create", "/event/update", "/event/delete" ).hasRole("ADMIN")
-                        .requestMatchers("/user/claim/**").hasRole("STUDENT")
-                        .requestMatchers("/event/mylist").hasRole("TEACHER")
+                        .requestMatchers("/event/new", "/event/list", "/event/create",
+                                "/event/update", "/event/delete", "/attendances/calls", "/attendances/list","/attendances/create",
+                                "/attendances/attendancesAnalist","/attendances/register","/attendances/registerCall","/constancy/list").hasRole("ADMIN")
+                        .requestMatchers("/user/claim/**","/constancy/create","/constancy/new","/constancy/delete","/constancy/update",
+                                "/constancy/myList").hasRole("STUDENT")
+                        .requestMatchers("/event/mylist","attendances/attendancesTeacher","attendances/registerByTeacher").hasRole("TEACHER")
                         .anyRequest().authenticated())
                 .formLogin(form -> form.loginPage("/login")
                         .defaultSuccessUrl("/home", true)

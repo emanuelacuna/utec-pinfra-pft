@@ -227,6 +227,7 @@ public class UserServiceImp implements UserService {
                 .institutionalEmail(user.getInstitutionalEmail())
                 .itr(user.getItr().getId())
                 .active(user.isActive())
+                .age(user.getAge())
                 .build();
         if (user instanceof Student student) {
             userDto.setGeneration(student.getGeneration());

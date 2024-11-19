@@ -9,6 +9,9 @@ import edu.utec.pinfraPft.service.AttendanceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class AttendanceServiceImpl implements AttendanceService {
@@ -37,7 +40,12 @@ public class AttendanceServiceImpl implements AttendanceService {
         attendanceDto.setId(attendance.getId());
         attendanceDto.setStudent(attendance.getStudent().getId());
         attendanceDto.setEvent(attendance.getEvent().getId());
-        attendanceDto.setStatus(attendance.getStatus());
+        if (attendance.getStatus() != null) {
+            attendanceDto.setStatus(attendance.getStatus());
+        }else{
+            attendanceDto.setStatus("");
+        }
+
         attendanceDto.setQualification(attendance.getQualification());
         return attendanceDto;
     }
@@ -47,6 +55,27 @@ public class AttendanceServiceImpl implements AttendanceService {
         // Mapea el AttendanceDto a una entidad y guarda en la base de datos
         Attendance attendance = mapToEntity(attendanceDto);
         attendanceRepository.save(attendance);
+    }
+
+    @Override
+    public void saveCall(AttendanceDto attendanceDto) {
+        Attendance attendance = new Attendance();
+        attendance.setId(attendanceDto.getId());
+        attendance.setStudent(userRepository.findById(attendanceDto.getStudent())
+                .orElseThrow(() -> new RuntimeException("User not found"))); // Asegúrate de que el Dto contenga el objeto Student
+        attendance.setEvent(eventRepository.findById(attendanceDto.getEvent())
+                .orElseThrow(() -> new RuntimeException("Event not found")));
+        attendanceRepository.save(attendance);
+    }
+
+    @Override
+    public List<AttendanceDto> findAll() {
+        return attendanceRepository.findAll().stream().map(this::mapToDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public AttendanceDto findById(long id) {
+        return attendanceRepository.findById(id).map(this::mapToDto).orElse(null);
     }
 
     @Override

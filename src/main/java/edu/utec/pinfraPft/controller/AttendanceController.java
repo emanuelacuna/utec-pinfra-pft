@@ -28,25 +28,24 @@ public class AttendanceController {
     private final UserService userService;
     private final AttendanceService attendanceService;
     private final Constantes constantes = new Constantes();
-    private final ItrService itrService;
 
     @GetMapping("/attendancesAnalist")
     public String listEvents(Model model) {
-        AttendanceDto attendanceDto = new AttendanceDto();
-        List<EventDto> events = eventService.findAll();
-        List<UserDto> students = userService.getAllStudents();
+        List<AttendanceDto> attendances = attendanceService.findAll();
+        List<AttendanceDto> attendancesFiltradas = attendances.stream()
+                .filter(attendance -> attendance.getStatus().isEmpty()) // Filtrar por status vacío
+                .collect(Collectors.toList());
+
         List<String> attendanceStatus = constantes.getAttendanceStatus();
 
-        // Filtrar estudiantes que tengan al menos un evento pendiente de asistencia
-        List<UserDto> filteredStudents = students.stream()
-                .filter(student -> events.stream()
-                        .anyMatch(event -> !attendanceService.hasAttendance(student.getId(), event.getId())))
-                .collect(Collectors.toList());
+        for (AttendanceDto attendance : attendancesFiltradas) {
+            UserDto user = userService.findUserDtoById(attendance.getStudent());
+            attendance.setNombreEvento(eventService.findById(attendance.getEvent()).getTitle());
+            attendance.setNombreStudent(user.getFirstName()+" "+user.getFirstSurname()+" "+user.getSecondSurname());
+        }
         // Pasar la lista de reclamos a la vista
-        model.addAttribute("events", events);
-        model.addAttribute("students", filteredStudents);
+        model.addAttribute("attendances", attendancesFiltradas);
         model.addAttribute("attendanceStatus", attendanceStatus);
-        model.addAttribute("attendance", attendanceDto);
 
         return "attendances/attendanceRegisterAnalist";
     }
@@ -55,45 +54,65 @@ public class AttendanceController {
     public String teacherListEvents(Model model) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         UserDto userDto = userService.findUserDtoByUsername(username);
-        List<EventDto> events = eventService.findAllByUserId(userDto.getId());
-        AttendanceDto attendanceDto = new AttendanceDto();
-        List<UserDto> students = userService.getAllStudents();
-        List<String> attendanceStatus = new ArrayList<>();
+        Long teacherId = userDto.getId(); // Suponiendo que el ID del teacher está en el UserDto
 
-        // Filtrar estudiantes que tengan al menos un evento pendiente de asistencia
-        List<UserDto> filteredStudents = students.stream()
-                .filter(student -> events.stream()
-                        .anyMatch(event -> !attendanceService.hasAttendance(student.getId(), event.getId())))
+        // Obtener todas las asistencias y filtrar por status vacío y eventos donde el teacher esté en la lista
+        List<AttendanceDto> attendances = attendanceService.findAll();
+        List<AttendanceDto> attendancesFiltradas = attendances.stream()
+                .filter(attendance -> attendance.getStatus().isEmpty()) // Filtrar por status vacío
+                .filter(attendance -> eventService.findById(attendance.getEvent()).getTeachers().stream()
+                        .anyMatch(teacher -> teacher.equals(teacherId))) // Filtrar si el teacher está en la lista
                 .collect(Collectors.toList());
-        // Pasar la lista de reclamos a la vista
-        model.addAttribute("events", events);
-        model.addAttribute("students", filteredStudents);
+
+        List<String> attendanceStatus = constantes.getAttendanceStatus();
+        for (AttendanceDto attendance : attendancesFiltradas) {
+            UserDto user = userService.findUserDtoById(attendance.getStudent());
+            attendance.setNombreEvento(eventService.findById(attendance.getEvent()).getTitle());
+            attendance.setNombreStudent(user.getFirstName()+" "+user.getFirstSurname()+" "+user.getSecondSurname());
+        }
+        // Pasar la lista de asistencias filtradas a la vista
+        model.addAttribute("attendances", attendancesFiltradas);
         model.addAttribute("attendanceStatus", attendanceStatus);
-        model.addAttribute("attendance", attendanceDto);
 
         return "attendances/attendanceRegisterTeacher";
     }
 
 
-    @PostMapping("/filter-events")
-    @ResponseBody
-    public Map<String, Object> filterEvents(@RequestParam Long studentId) {
-        System.out.println(studentId);
 
-        List<EventDto> allEvents = eventService.findAll();
-        List<EventDto> filteredEvents = allEvents.stream()
-                .filter(event -> !attendanceService.hasAttendance(studentId, event.getId()))
+
+    @GetMapping("/calls")
+    public String listEventsForCalls(Model model) {
+        AttendanceDto attendanceDto = new AttendanceDto();
+        List<EventDto> events = eventService.findAll();
+        List<UserDto> students = userService.getAllStudents();
+
+        // Filtrar estudiantes que tengan al menos un evento pendiente de asistencia
+        List<UserDto> filteredStudents = students.stream()
+                .filter(student -> events.stream()
+                        .anyMatch(event -> !attendanceService.hasAttendance(student.getId(), event.getId())))
+
                 .collect(Collectors.toList());
-        Map<String, Object> response = new HashMap<>();
-        response.put("events", filteredEvents);
-        response.put("hasEvents", !filteredEvents.isEmpty());
+        // Pasar la lista de reclamos a la vista
+        model.addAttribute("events", events);
+        model.addAttribute("students", filteredStudents);
+        model.addAttribute("attendance", attendanceDto);
 
-        return response;
+        return "callsStudentForEvent/callsStudentForEvent";
+    }
+
+    @PostMapping("/registerCall")
+    public String registerCallAttendance(@ModelAttribute AttendanceDto attendanceDto) {
+        // Lógica para guardar la asistencia
+        attendanceService.saveCall(attendanceDto);
+        return "redirect:/attendances/calls";
     }
 
     @PostMapping("/register")
     public String registerAttendance(@ModelAttribute AttendanceDto attendanceDto) {
         // Lógica para guardar la asistencia
+        AttendanceDto attendanceOriginal = attendanceService.findById(attendanceDto.getId());
+        attendanceDto.setStudent(attendanceOriginal.getStudent());
+        attendanceDto.setEvent(attendanceOriginal.getEvent());
         attendanceService.save(attendanceDto);
         return "redirect:/attendances/attendancesAnalist";
     }
@@ -102,7 +121,7 @@ public class AttendanceController {
     public String registerAttendanceByTeacher(@ModelAttribute AttendanceDto attendanceDto) {
         // Lógica para guardar la asistencia
         attendanceService.save(attendanceDto);
-        return "redirect:/attendances/attendancesAnalist";
+        return "redirect:/attendances/attendancesTeacher";
     }
 
 

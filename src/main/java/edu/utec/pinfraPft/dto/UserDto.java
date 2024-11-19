@@ -83,6 +83,8 @@ public class UserDto {
 
     private boolean active;
 
+    private int age;
+
     public UserDto(Long id, String username, String password, String firstName, String secondName, String firstSurname, String secondSurname, int document, LocalDate birthDate, String personalEmail, int phone, Department department, Locality locality, String institutionalEmail, Itr itr, boolean active) {
         this.id = id;
         this.username = username;

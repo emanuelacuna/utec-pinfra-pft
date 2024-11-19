@@ -23,6 +23,7 @@ public class EventServiceImp implements EventService {
     private final UserRepository userRepository;
     private final ItrRepository itrRepository;
     private final EventTeacherRepository eventTeacherRepository;
+    private final AttendanceRepository attendanceRepository;
 
     private Event mapToEntity(EventDto eventDto) {
         Event event = new Event();
@@ -117,5 +118,6 @@ public class EventServiceImp implements EventService {
                 .map(this::mapToDto)
                 .toList();
     }
+
 
 }

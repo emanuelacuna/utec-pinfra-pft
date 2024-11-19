@@ -5,5 +5,5 @@ import edu.utec.pinfraPft.model.ActionTaken;
 
 public interface ActionTakenService {
 
-    public void save(ActionTakenDto actionTakenDto);
+     void save(ActionTakenDto actionTakenDto);
 }

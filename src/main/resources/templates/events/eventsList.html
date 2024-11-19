@@ -41,8 +41,8 @@
                     <td th:text="${event.title}"></td>
                     <td th:text="${event.eventType}"></td>
                     <td th:text="${event.teacherNames}"></td>
-                    <td th:text="${event.startingDate}"></td>
-                    <td th:text="${event.endingDate}"></td>
+                    <td th:text="${#temporals.format(event.startingDate, 'dd/MM/yyyy HH:mm')}"></td>
+                    <td th:text="${#temporals.format(event.endingDate, 'dd/MM/yyyy HH:mm')}"></td>
                     <td th:text="${event.mode}"></td>
                     <td th:text="${event.getItrName()}"></td>
                     <td th:text="${event.location}"></td>
@@ -182,7 +182,6 @@
         $('#eventList').DataTable({
             "pagingType": "simple_numbers",
             "searching": true,
-            "lengthMenu": [10, 25, 50, 100],
             "language": {
                 "lengthMenu": "Mostrar _MENU_ filas por página",
                 "zeroRecords": "No se encontraron resultados",
@@ -197,8 +196,7 @@
                     "previous": "Anterior"
                 }
             },
-            "buttons": [
-                'copy', 'excel', 'pdf'
+            "buttons": [ 'pdf'
             ]
         });
     });

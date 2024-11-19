@@ -84,6 +84,14 @@
        class="button-item" th:href="@{/attendances/attendancesAnalist}">
         Register Attendance
     </a>
+    <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
+       class="button-item" th:href="@{/attendances/calls}">
+        Register Event Call
+    </a>
+    <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
+       class="button-item" th:href="@{/admin/reports}">
+        Reports
+    </a>
 
     <!-- Opciones para TEACHER -->
     <a th:if="${#authorization.expression('hasRole(''TEACHER'')')}"

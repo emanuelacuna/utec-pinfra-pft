@@ -1,10 +1,6 @@
 package edu.utec.pinfraPft.controller;
 
-import edu.utec.pinfraPft.dto.ActionTakenDto;
-import edu.utec.pinfraPft.dto.AttendanceDto;
-import edu.utec.pinfraPft.dto.ClaimDto;
-import edu.utec.pinfraPft.dto.UserDto;
-import edu.utec.pinfraPft.model.Attendance;
+import edu.utec.pinfraPft.dto.*;
 import edu.utec.pinfraPft.service.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +28,8 @@ public class AdminController {
     private final ClaimService claimService;
 
     private final ActionTakenService actionTakenService;
+
+    private final ReportService reportService;
 
     @GetMapping
     public String admin(Model model) {
@@ -108,4 +106,56 @@ public class AdminController {
     }
 
 
+    @GetMapping("/reports/justifications")
+    public String getJustificationsByStudent(@RequestParam Long student_r1,
+                                             @RequestParam(required = false, defaultValue = "justifications") String activeTab,
+                                             Model model) {
+        List<JustificationDto> justifications = reportService.findJustificationsByStudentId(student_r1);
+        List<UserDto> users = userService.getAllStudents();
+        model.addAttribute("students_r1", users);
+        model.addAttribute("students_r2", users);
+        model.addAttribute("students_r3", users);
+        model.addAttribute("justifications", justifications);
+        model.addAttribute("activeTab", activeTab);
+        return "/reports/reports";
+    }
+
+    @GetMapping("/reports/events")
+    public String getEventsByStudent(@RequestParam Long student_r3,
+                                     @RequestParam(required = false, defaultValue = "events") String activeTab,
+                                     Model model) {
+        List<EventDto> events = reportService.findEventsByStudentId(student_r3);
+
+        List<UserDto> users = userService.getAllStudents();
+        model.addAttribute("students_r1", users);
+        model.addAttribute("students_r2", users);
+        model.addAttribute("students_r3", users);
+        model.addAttribute("activeTab", activeTab);
+        model.addAttribute("events", events);
+        return "/reports/reports";
+    }
+
+    @GetMapping("/reports/constancies")
+    public String getConstanciesByStudent(@RequestParam Long student_r2,
+                                          @RequestParam(required = false, defaultValue = "constancies") String activeTab,
+                                          Model model) {
+        List<ConstancyDto> constancies = reportService.findConstanciesByStudentId(student_r2);
+
+        List<UserDto> users = userService.getAllStudents();
+        model.addAttribute("students_r1", users);
+        model.addAttribute("students_r2", users);
+        model.addAttribute("students_r3", users);
+        model.addAttribute("activeTab", activeTab);
+        model.addAttribute("constancies", constancies);
+        return "/reports/reports";
+    }
+
+    @GetMapping("/reports")
+    public String getReports(Model model) {
+        List<UserDto> users = userService.getAllStudents();
+        model.addAttribute("students_r1", users);
+        model.addAttribute("students_r2", users);
+        model.addAttribute("students_r3", users);
+        return "/reports/reports";
+    }
 }
