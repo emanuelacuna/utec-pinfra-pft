@@ -120,6 +120,9 @@ public class AttendanceController {
     @PostMapping("/registerByTeacher")
     public String registerAttendanceByTeacher(@ModelAttribute AttendanceDto attendanceDto) {
         // Lógica para guardar la asistencia
+        AttendanceDto attendanceOriginal = attendanceService.findById(attendanceDto.getId());
+        attendanceDto.setStudent(attendanceOriginal.getStudent());
+        attendanceDto.setEvent(attendanceOriginal.getEvent());
         attendanceService.save(attendanceDto);
         return "redirect:/attendances/attendancesTeacher";
     }
