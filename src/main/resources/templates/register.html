@@ -56,7 +56,11 @@
 
                         <div class="form-group mb-3">
                             <label for="gender">Gender</label>
-                            <input type="text" id="gender" class="form-control" name="gender" th:field="*{gender}">
+                            <select id="gender" name="gender" class="form-control" th:field="*{gender}" required>
+                                <option th:each="gender : ${genders}"
+                                        th:value="${gender}"
+                                        th:text="${gender}">Gender</option>
+                            </select>
                         </div>
                         <p th:if="${#fields.hasErrors('gender')}" class="text-danger" th:errors="*{gender}"></p>
 
@@ -85,16 +89,16 @@
 
                         <div class="form-group mb-3">
                             <label for="department">Department</label>
-                            <select type="text" id="department" class="form-control" name="department" th:field="*{department}">
-                                <option th:each="department : ${departments}" th:value="${department.getId()}" th:text="${department.getName()}"></option>
+                            <select id="department" class="form-control" name="department" th:field="*{department}">
+                                <option th:each="department : ${departments}" th:value="${department.id}" th:text="${department.name}"></option>
                             </select>
                         </div>
                         <p th:if="${#fields.hasErrors('department')}" class="text-danger" th:errors="*{department}"></p>
 
                         <div class="form-group mb-3">
                             <label for="locality">Locality</label>
-                            <select type="text" id="locality" class="form-control" name="locality" th:field="*{locality}">
-                                <option th:each="locality : ${localities}" th:value="${locality.getId()}" th:text="${locality.getName()}"></option>
+                            <select id="locality" class="form-control" name="locality" th:field="*{locality}">
+                                <!-- Las opciones se llenarán dinámicamente con JS -->
                             </select>
                         </div>
                         <p th:if="${#fields.hasErrors('locality')}" class="text-danger" th:errors="*{locality}"></p>
@@ -177,6 +181,30 @@
 
         // Initialize fields on load
         toggleFields();
+    });
+</script>
+<script>
+    document.getElementById("department").addEventListener("change", function () {
+        var departmentId = this.value;
+
+        // Si no se selecciona un departamento válido, no hacer nada
+        if (!departmentId) return;
+
+        fetch("/localities/" + departmentId)
+            .then(response => response.json())
+            .then(localities => {
+                var localitySelect = document.getElementById("locality");
+                localitySelect.innerHTML = ""; // Limpiar las opciones actuales
+
+                // Crear y agregar las nuevas opciones
+                localities.forEach(function(locality) {
+                    var option = document.createElement("option");
+                    option.value = locality.id;
+                    option.textContent = locality.name;
+                    localitySelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error("Error fetching localities:", error));
     });
 </script>
 </body>

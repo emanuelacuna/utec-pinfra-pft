@@ -59,7 +59,7 @@
 
                         <div class="form-group mb-3">
                             <label for="teachers">Teachers</label>
-                            <select id="teachers" name="teachers" class="form-control" multiple>
+                            <select id="teachers" name="teachers" class="form-control" multiple required>
                                 <option th:each="teacher : ${teachers}"
                                         th:value="${teacher.id}"
                                         th:text="${teacher.getFirstName()+' '+teacher.getFirstSurname()}">Teacher Name</option>

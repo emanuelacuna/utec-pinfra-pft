@@ -25,7 +25,7 @@
                     <form method="post" role="form" th:action="@{/constancy/create}">
                         <div class="form-group mb-3">
                             <label for="constancyType">Constancy Type</label>
-                            <select id="constancyType" name="constancyType" class="form-control">
+                            <select id="constancyType" name="constancyType" class="form-control" required>
                                 <option th:each="constancyType : ${constancyTypes}"
                                         th:value="${constancyType}"
                                         th:text="${constancyType}">Constancy Type</option>
@@ -33,7 +33,7 @@
                         </div>
                         <div class="form-group mb-3">
                             <label for="event">Event</label>
-                            <select id="event" name="event" class="form-control">
+                            <select id="event" name="event" class="form-control" required>
                                 <option th:each="event : ${events}"
                                         th:value="${event.getId()}"
                                         th:text="${event.getTitle()}">Event</option>

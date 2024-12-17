@@ -75,19 +75,35 @@
                     </div>
                     <div class="form-group mb-3">
                         <label for="description">Description</label>
-                        <textarea id="description" class="form-control" name="description" rows="3" th:text="${claim.description}"></textarea>
+                        <textarea id="description" class="form-control" name="description" rows="3" th:text="${claim.description}" required></textarea>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>Type</label>
+                        <div>
+                            <input type="radio" id="eventVmeEdit_${claim.id}" name="eventVme" value="VME"
+                                   th:checked="${claim.eventVme == 'VME'}" onclick="toggleSelection('activityApeEdit_${claim.id}','eventVmeEdit_${claim.id}')">
+                            <label for="eventVmeEdit_${claim.id}">VME</label>
+
+                            <input type="radio" id="activityApeEdit_${claim.id}" name="activityApe" value="APE"
+                                   th:checked="${claim.activityApe == 'APE'}" onclick="toggleSelection('eventVmeEdit_${claim.id}','activityApeEdit_${claim.id}')">
+                            <label for="activityApeEdit_${claim.id}">APE</label>
+                        </div>
                     </div>
                     <div class="form-group mb-3">
                         <label for="teacher">Teacher</label>
-                        <input type="text" id="teacher" class="form-control" name="teacher" th:value="${claim.teacher}">
+                        <input type="text" id="teacher" class="form-control" name="teacher" th:value="${claim.teacher}" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="date">Date</label>
+                        <input type="date" id="date" class="form-control" name="date" th:value="${claim.date}" required>
                     </div>
                     <div class="form-group mb-3">
                         <label for="credits">Credits</label>
-                        <input type="number" id="credits" class="form-control" name="credits" th:value="${claim.credits}">
+                        <input type="number" id="credits" class="form-control" name="credits" th:value="${claim.credits}" required>
                     </div>
                     <div class="form-group mb-3">
                         <label for="semester">Semester</label>
-                        <input type="text" id="semester" class="form-control" name="semester" th:value="${claim.semester}">
+                        <input type="text" id="semester" class="form-control" name="semester" th:value="${claim.semester}" required>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary">Save Changes</button>
@@ -153,5 +169,15 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
+<script>
+    // Función para deseleccionar el otro radio button
+    function toggleSelection(otherRadioId,radioActualId) {
+        const otherRadio = document.getElementById(otherRadioId);
+        const radioActual = document.getElementById(radioActualId);
+        otherRadio.checked = false;
+        otherRadio.required= false;
+        radioActual.required=true;
+    }
+</script>
 </body>
 </html>

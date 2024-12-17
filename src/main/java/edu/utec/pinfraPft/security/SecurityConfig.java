@@ -67,7 +67,7 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/login", "/register", "/css/**", "/images/**" ).permitAll()
+                        .requestMatchers("/login", "/register","/localities/**", "/css/**", "/images/**" ).permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/event/new", "/event/list", "/event/create",
                                 "/event/update", "/event/delete", "/attendances/calls", "/attendances/list","/attendances/create",

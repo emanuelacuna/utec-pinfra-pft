@@ -2,6 +2,7 @@ package edu.utec.pinfraPft.controller;
 
 import edu.utec.pinfraPft.dto.ClaimDto;
 import edu.utec.pinfraPft.dto.UserDto;
+import edu.utec.pinfraPft.model.Constancy;
 import edu.utec.pinfraPft.model.UserEntity;
 import edu.utec.pinfraPft.service.*;
 import jakarta.validation.Valid;
@@ -30,6 +31,9 @@ public class UserController {
     private final LocalityService localityService;
 
     private final ItrService itrService;
+
+    private final Constantes constantes = new Constantes();
+
     private final AuthController authController;
 
     @PostMapping("/dropout")
@@ -104,6 +108,7 @@ public class UserController {
     @PostMapping("/claim/update")
     public String updateClaim(@ModelAttribute("claim") ClaimDto claimDto) {
         claimDto.setUpdated(LocalDateTime.now());
+        claimDto.setStatus(constantes.getConstancyStatus().get(0));
         claimService.update(claimDto.getId(),claimDto);
         return "redirect:/user/claim/list";
     }

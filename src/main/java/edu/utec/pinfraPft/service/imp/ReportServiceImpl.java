@@ -48,6 +48,7 @@ public class ReportServiceImpl implements ReportService {
             constancyDto.setDate(constancy.getDate());
             constancyDto.setStatus(constancy.getStatus());
             constancyDto.setEvent(constancy.getEvent().getId());
+            constancyDto.setEventTitle(constancy.getEvent().getTitle());
             constancyDto.setConstancyType(constancy.getConstancyType());
             constancyDto.setInfo(constancy.getInfo());
             constancyDto.setStudent(constancy.getStudent().getId());
@@ -64,12 +65,17 @@ public class ReportServiceImpl implements ReportService {
             eventDto.setEventType(event.getEventType());
             eventDto.setLocation(event.getLocation());
             eventDto.setItr(event.getItr().getId());
+            eventDto.setItrName(event.getItr().getName());
             eventDto.setStatus(event.getStatus());
             eventDto.setMode(event.getMode());
             eventDto.setTitle(event.getTitle());
             eventDto.setStartingDate(event.getStartingDate());
             eventDto.setEndingDate(event.getEndingDate());
             eventDto.setTeachers(event.getTeachers().stream().map(UserEntity::getId).collect(Collectors.toList()));
+            eventDto.setTeacherNames(event.getTeachers()
+                    .stream()
+                    .map(teacher -> teacher.getFirstName() + " " + teacher.getFirstSurname())
+                    .collect(Collectors.toList()).toString());
             eventDtos.add(eventDto);
         }
         return eventDtos;

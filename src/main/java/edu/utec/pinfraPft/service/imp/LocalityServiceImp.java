@@ -64,4 +64,12 @@ public class LocalityServiceImp implements LocalityService {
                 .map(this::mapToDto)
                 .toList();
     }
+
+    @Override
+    public List<LocalityDto> findLocalityByDepartment(Long departmentId) {
+        return localityRepository.findByDepartmentId(departmentId)
+                .stream()
+                .map(this::mapToDto)
+                .toList();
+    }
 }

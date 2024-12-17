@@ -15,4 +15,6 @@ public interface LocalityService {
     LocalityDto findById(Long id);
 
     List<LocalityDto> findAll();
+
+    List<LocalityDto> findLocalityByDepartment(Long departmentId);
 }

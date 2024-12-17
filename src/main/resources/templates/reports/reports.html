@@ -214,7 +214,7 @@
                         <tr th:each="event : ${events}">
                             <td th:text="${event.title}"></td>
                             <td th:text="${event.eventType}"></td>
-                            <td th:text="${event.teachers}"></td>
+                            <td th:text="${event.teacherNames}"></td>
                             <td th:text="${#temporals.format(event.startingDate, 'dd/MM/yyyy HH:mm')}"></td>
                             <td th:text="${#temporals.format(event.endingDate, 'dd/MM/yyyy HH:mm')}"></td>
                             <td th:text="${event.mode}"></td>

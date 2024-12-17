@@ -1,9 +1,6 @@
 package edu.utec.pinfraPft.controller;
 
-import edu.utec.pinfraPft.dto.DepartmentDto;
-import edu.utec.pinfraPft.dto.ItrDto;
-import edu.utec.pinfraPft.dto.LocalityDto;
-import edu.utec.pinfraPft.dto.UserDto;
+import edu.utec.pinfraPft.dto.*;
 import edu.utec.pinfraPft.service.DepartmentService;
 import edu.utec.pinfraPft.service.ItrService;
 import edu.utec.pinfraPft.service.LocalityService;
@@ -15,12 +12,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -33,6 +28,8 @@ public class AuthController {
     private final LocalityService localityService;
 
     private final ItrService itrService;
+
+    private final Constantes constantes = new Constantes();
 
     @GetMapping("/login")
     public String login(@RequestParam(value = "error", required = false) String error,
@@ -48,15 +45,18 @@ public class AuthController {
     @GetMapping("/register")
     public String getRegisterForm(Model model){
 
+
         UserDto user = new UserDto();
         List<DepartmentDto> departments = departmentService.findAll();
         List<LocalityDto> localities = localityService.findAll();
         List<ItrDto> itrs = itrService.findAll();
+        List<String> genders = constantes.getSexo();
 
         model.addAttribute("user", user);
         model.addAttribute("departments", departments);
         model.addAttribute("localities", localities);
         model.addAttribute("itrs", itrs);
+        model.addAttribute("genders", genders);
 
         return "register";
     }
@@ -96,5 +96,11 @@ public class AuthController {
     @GetMapping("/home")
     public String home() {
         return "home";
+    }
+
+    @GetMapping("/localities/{departmentId}")
+    @ResponseBody // Asegúrate de que este decorador esté presente
+    public List<LocalityDto> getLocalitiesByDepartment(@PathVariable Long departmentId) {
+        return localityService.findLocalityByDepartment(departmentId); // Esto devolverá un JSON
     }
 }
